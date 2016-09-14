@@ -1,6 +1,6 @@
 //
 //  LevelLoader.h
-//  Platformer2
+//  StealthPlatformer
 //
 //  Created by James Vaughan Craster on 04/09/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.

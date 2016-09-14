@@ -1,6 +1,6 @@
 //
 //  AnimationController.cpp
-//  Platformer1
+//  StealthPlatformer
 //
 //  Created by James Vaughan Craster on 29/08/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
