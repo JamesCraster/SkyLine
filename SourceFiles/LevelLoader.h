@@ -14,38 +14,62 @@
 #include <vector>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-class Spike{
+#include "Entities.h"
+std::vector<std::vector<int>> loadLevelVectorFromString(std::string levelString,int levelWidth, int levelHeight,sf::Vector2f tileSize);
+//ensure each chunk is given correct position! (last Chunk.position + last Chunk.position + Chunk.size.x)
+class Chunk{
 public:
-    sf::Vector2f position,leftCornerOffset,dimensions, rotationalCenter;
-    sf::FloatRect collisionBox;
-    sf::Sprite spikeSprite;
-    sf::RectangleShape rect;
-    
-    Spike(sf::Vector2f position, sf::Vector2f leftCornerOffset, sf::Vector2f dimensions, sf::Vector2f rotationalCenter){
+    std::vector<std::vector<int>> chunkVector;
+    sf::Vector2f position;
+    sf::Vector2f size;
+    Chunk(std::vector<std::vector<int>> chunkVector, sf::Vector2f position, sf::Vector2f size){
+        this->chunkVector = chunkVector;
         this->position = position;
-        this->leftCornerOffset = leftCornerOffset;
-        this->dimensions = dimensions;
-        this->rotationalCenter = rotationalCenter;
-        collisionBox.left = position.x + leftCornerOffset.x;
-        collisionBox.top = position.y + leftCornerOffset.y;
-        collisionBox.height = dimensions.y;
-        collisionBox.width = dimensions.x;
-        spikeSprite.setPosition(position.x, position.y);
-        spikeSprite.setOrigin(rotationalCenter);
-        spikeSprite.move(rotationalCenter);
-        rect.setSize(sf::Vector2f(collisionBox.width,collisionBox.height));
-        rect.setPosition(sf::Vector2f(sf::Vector2f(collisionBox.left,collisionBox.top)));
-        rect.setOrigin(rotationalCenter.x - leftCornerOffset.x,rotationalCenter.y - leftCornerOffset.y);
-        rect.move(rotationalCenter.x - leftCornerOffset.x,rotationalCenter.y - leftCornerOffset.y);
+        this->size = size;
     }
-    void rotate(float degrees){
-        
-        rect.rotate(degrees);
-        collisionBox = rect.getGlobalBounds();
-        spikeSprite.rotate(degrees);
-        
+    Chunk(std::string chunkString, sf::Vector2f position, sf::Vector2f size, sf::Vector2f tileSize){
+        //problem is this function here!!
+        chunkVector = loadLevelVectorFromString(chunkString, size.x, size.y, tileSize);
+        this->position = position;
+        this->size = size;
     }
+    
 };
-std::vector<sf::RectangleShape*> loadLevelFromString(std::string levelString,int levelWidth, int levelHeight,sf::Vector2f tileSize, std::vector<Spike*> & spikeVector);
+std::vector<std::vector<int>> convertChunkVectorToLevelVector(std::vector<Chunk> chunkVector);
+
+class ChunkChain{
+public:
+    std::vector<Chunk> chunkChain;
+    sf::Vector2f position = sf::Vector2f(0,0);
+    std::vector<std::vector<int>> levelVector;
+    void convertChunkChainToLevelVector(){
+        levelVector = convertChunkVectorToLevelVector(chunkChain);
+    }
+    void appendChunk(Chunk chunk){
+        chunkChain.push_back(chunk);
+        convertChunkChainToLevelVector();
+        if(chunkChain.size() > 0){
+            position = chunkChain[0].position;
+        }
+    }
+    void removeChunk(){
+        chunkChain.erase(chunkChain.begin());
+        convertChunkChainToLevelVector();
+        if(chunkChain.size() > 0){
+            position = chunkChain[0].position;
+        }
+    }
+    
+    
+    
+    
+};
+
+std::vector<std::vector<int>> loadLevelFromString(std::string levelString,int levelWidth, int levelHeight,sf::Vector2f tileSize, std::vector<Spike*> & spikeVector,std::vector<sf::RectangleShape*>& tileVector);
+
+void loadLevelFromLevelVector(std::vector<std::vector<int>> levelVector, sf::Vector2f tileSize, std::vector<Spike*> & spikeVector, std::vector<sf::RectangleShape*> & tileVector);
+std::vector<std::vector<int>> loadLevelFromChunkChain(ChunkChain chunkChain, sf::Vector2f tileSize, std::vector<Spike*> &spikeVector, std::vector<sf::RectangleShape*>& tileVector);
+//ensure floorSprite can be drawn from ChunkChain!!
+void drawFloorSpriteFromLevelVector(std::vector<std::vector<int>> levelVector, sf::Texture floorTexture, sf::Texture floorTextureRotated, sf::RenderWindow & window);
 
 #endif /* defined(__Platformer2__LevelLoader__) */
