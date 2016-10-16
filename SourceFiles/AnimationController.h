@@ -23,7 +23,6 @@ private:
     sf::Clock interFrameTransitionClock;
     int currentFrame;
     float animationSpeed;
-    
 public:
     bool active;
     AnimationController(std::vector <float> passFrameDurations, std::vector <sf::Texture*> passFrameTextures, sf::Sprite * passSprite);

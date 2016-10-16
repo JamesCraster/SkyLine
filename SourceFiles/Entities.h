@@ -1,6 +1,6 @@
 //
 //  Entities.h
-//  StealthPlatformer
+//  Platformer2
 //
 //  Created by James Vaughan Craster on 07/10/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
@@ -17,11 +17,14 @@ public:
     int direction;
     float gravity;
     PhysicsController physicsController;
+    int health;
+    sf::Clock damageClock;
     
-    Player(std::vector<AnimationController> passAnimationControllerVector,float mass,float width,float height,sf::Vector2f passTopLeftCornerOffset,sf::Vector2f boundingBoxOffset,sf::Vector2f boundingBoxDimensions,float passGravity):SpriteController(passAnimationControllerVector, boundingBoxOffset,boundingBoxDimensions),physicsController(mass,width,height,passTopLeftCornerOffset){
+    Player(std::vector<AnimationController> passAnimationControllerVector,float mass,float width,float height,sf::Vector2f passTopLeftCornerOffset,sf::Vector2f boundingBoxOffset,sf::Vector2f boundingBoxDimensions,float passGravity, int passHealth):SpriteController(passAnimationControllerVector, boundingBoxOffset,boundingBoxDimensions),physicsController(mass,width,height,passTopLeftCornerOffset){
         isJumping = 0;
         direction = 0;
         gravity = passGravity;
+        health = passHealth;
     }
     void testTileCollisions(std::vector<sf::RectangleShape*> tileVector){
         physicsController.tileCollisionController.stationaryCollisionTest(tileVector, sprite.getPosition(),2);
@@ -46,6 +49,18 @@ public:
         sprite.move(physicsController.update(timeElapsed, sprite.getPosition(), tileVector));
         this->positionBoundingBox(sprite.getPosition());
         testTileCollisions(tileVector);
+    }
+    void damage(int passDamage){
+        health -= passDamage;
+        if(health < 0){
+            die();
+        }else{
+             //call some animation to make player blink
+        }
+        
+    }
+    void die(){
+        
     }
 };
 class Enemy:public SpriteController{

@@ -5,7 +5,9 @@
 //  Created by James Vaughan Craster on 29/08/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
 //
-
+//AIMS:
+//get controller support
+//code gen
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include "ResourcePath.hpp"
@@ -15,9 +17,11 @@
 #include "LevelLoader.h"
 #include "Camera.h"
 #include <iostream>
+#include "LevelGenerator.h"
+
 
 void addChain(ChunkChain &chunkChain){
-    std::string level2String = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,10,0,0,0,0,0,10,0,0,0,0,10,0,0,0,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,10n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n";
+    std::string level2String = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,10,0,0,0,0,0,10,0,0,0,0,10,1,0,0,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,10n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n";
     
     chunkChain.appendChunk(Chunk(level2String,sf::Vector2f(chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.x + chunkChain.chunkChain[chunkChain.chunkChain.size()-1].size.x,chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.y), sf::Vector2f(20*32,20*32), sf::Vector2f(32,32)));
 }
@@ -85,7 +89,7 @@ int main(int, char const**)
     
     
     
-    Player player(std::vector<AnimationController> {},25,10,23, sf::Vector2f(5,9),sf::Vector2f(-5,-9),sf::Vector2f(10,20),13000/20);
+    Player player(std::vector<AnimationController> {},25,10,23, sf::Vector2f(5,9),sf::Vector2f(-5,-9),sf::Vector2f(10,20),13000/20,3);
     Enemy enemy(std::vector<AnimationController> {},20,10,23,sf::Vector2f(5,9),sf::Vector2f(5,9),sf::Vector2f(10,20),13000/20);
     
     AnimationController run(std::vector<float> (10,0.5),std::vector<sf::Texture*> {&runNinja1,&runNinja2,&runNinja3,&runNinja4,&runNinja5,&runNinja6,&runNinja7,&runNinja8,&runNinja9,&runNinja10},&player.sprite);
@@ -160,7 +164,31 @@ int main(int, char const**)
     rectangle.setSize(sf::Vector2f(300,300));
     rectangle.setFillColor(sf::Color::Red);
     rectangle.setOrigin(-150,-150);
-   
+    std::vector<std::vector<int>> generatedThing{{1},{1},{1}};
+    //something's wrong with generator()...
+    generator(generatedThing, 1, std::vector<int>{1,2}, std::vector<float> {0.5,0.5}, std::vector<bool> {0,0},std::vector<int> {0,0}, std::vector<int> {0,0});
+    std::cout << generatedThing[0][0] << std::endl;
+    std::cout << generatedThing[1][0] << std::endl;
+    std::cout << generatedThing[2][0] << std::endl;
+    //quota(3, 1, 3, 4);
+   // probability(std::vector<int> {1}, std::vector<float> {0.1});
+    //inVector(std::vector<int> {1}, 1);
+    //std::cout << generatedThing[0]
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0,9);
+    sf::Vector2f playerMovement;
+    playerMovement = player.sprite.getPosition();
+    sf::Vector2f cameraMovement = sf::Vector2f(window.sf::Window::getSize().x/2.f,window.sf::Window::getSize().y/2.f);
+    sf::Sprite healthSprite;
+    sf::Texture healthTexture;
+    healthTexture.loadFromFile(resourcePath() + "HealthBar.png");
+    healthSprite.setTexture(healthTexture);
+    for(int x = 0; x < 1000; x++){
+        
+    //std::cout << distribution(generator) << std::endl;
+    }
+    sf::Joystick ps3Cont;
+    
     while (window.isOpen())
     
     {
@@ -208,7 +236,7 @@ int main(int, char const**)
                 
                 mostRecentlyPressed = 0;
             }
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W){
+            if((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) ||  ps3Cont.isButtonPressed(0,11)){
                 if((player.physicsController.tileCollisionController.southContact || jumpClock.getElapsedTime().asSeconds() < 0.1) && player.isJumping == 0){
                     player.isJumping = 1;
                     player.animationControllerVector[0].active = 0;
@@ -224,7 +252,6 @@ int main(int, char const**)
                 
             }
         }
-        
         
         if(!player.isJumping){
             player.animationControllerVector[0].active = 1;
@@ -243,7 +270,7 @@ int main(int, char const**)
             addChain(chunkChain);
             levelVector = loadLevelFromChunkChain(chunkChain, sf::Vector2f(32,32), spikeVector, tileVector);
         }
-        
+       // std::cout << ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) << std::endl;
         player.animationControllerVector[0].setAnimationSpeed(std::abs(player.physicsController.xVelocity)/50);
         storedSouthContact = player.physicsController.tileCollisionController.southContact;
         window.clear();
@@ -252,13 +279,13 @@ int main(int, char const**)
                 sf::Clock physicsTime;
             player.testTileCollisions(tileVector);
             if(mostRecentlyPressed == 1){
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) > 10)
                 {
                     player.direction = 1;
                     player.animationControllerVector[0].update();
                     player.sprite.setScale(2, 2);
                     
-                }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) < -10)
                 {
                     player.direction = -1;
                     player.animationControllerVector[0].update();
@@ -274,7 +301,7 @@ int main(int, char const**)
                 }
             }else
             {
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) > 10)
                 {
                     player.direction = -1;
                     player.animationControllerVector[0].update();
@@ -353,7 +380,7 @@ int main(int, char const**)
         }
         for(int x = 0; x < spikeVector.size(); x++){
             if(player.boundingBox.intersects(spikeVector[x]->collisionBox)){
-                window.close();
+                player.damage(1);
             }
         }
         
@@ -363,20 +390,37 @@ int main(int, char const**)
        
         cameraTime = storedFrameTime;
         
+        sf::RectangleShape skyScraper;
+        skyScraper.setPosition(100, 200);
+        skyScraper.setSize(sf::Vector2f(300, 1000));
+        skyScraper.setOutlineColor(sf::Color(24/3,118/3,118/3));
+        skyScraper.setOutlineThickness(5);
+        skyScraper.setFillColor(sf::Color(24,118,118,0));
+        skyScraper.move(-(cameraMovement.x - playerView.getCenter().x)/1.1,0);
+        //move slightly less than the foreground
+      
+        window.draw(skyScraper);
+        
         positionView(playerView, player.sprite.getPosition(), cameraTime);
         //still problems with corners!!
         enemy.update(tileVector);
-        sf::RectangleShape rect;
-        rect.setFillColor(sf::Color::Red);
+        
         window.setView(playerView);
         for(int i = 0; i < tileVector.size(); i++){
-            //window.draw(*tileVector[i]);
-           // tileVector[i]->move(-1, 0);
+            tileVector[i]->setFillColor(sf::Color::Black);
+            tileVector[i]->setOutlineColor(sf::Color(0,0,0,0));
+            tileVector[i]->setSize(sf::Vector2f(tileVector[i]->getSize().x+1, tileVector[i]->getSize().y+1));
+            window.draw(*tileVector[i]);
+            tileVector[i]->setSize(sf::Vector2f(tileVector[i]->getSize().x-1, tileVector[i]->getSize().y-1));
+  
         }
-        //take spikes into account!
+
         drawFloorSpriteFromLevelVector(levelVector, floorTexture, floorTextureRotated, window);
         
-        
+        for(int i = 0; i < player.health; i++){
+            healthSprite.setPosition(playerView.getCenter().x - playerView.getSize().x/2 + 20 + 52 * i,playerView.getCenter().y  - playerView.getSize().y/2 + 20);
+            window.draw(healthSprite);
+        }
         
         enemy.animationControllerVector[0].update();
         for (int x = 0; x < spikeVector.size(); x++){
@@ -384,6 +428,7 @@ int main(int, char const**)
             window.draw(spikeVector[x]->spikeSprite);
         }
         window.draw(player.sprite);
+        
         window.display();
         storedFrameTime =  frameTime.restart().asSeconds();
     }
