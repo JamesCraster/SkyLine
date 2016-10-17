@@ -38,10 +38,12 @@ public:
 std::vector<std::vector<int>> convertChunkVectorToLevelVector(std::vector<Chunk> chunkVector);
 
 class ChunkChain{
+
 public:
     std::vector<Chunk> chunkChain;
     sf::Vector2f position = sf::Vector2f(0,0);
     std::vector<std::vector<int>> levelVector;
+    int readPosition = 0;
     void convertChunkChainToLevelVector(){
         levelVector = convertChunkVectorToLevelVector(chunkChain);
     }
@@ -53,11 +55,17 @@ public:
         }
     }
     void removeChunk(){
-        chunkChain.erase(chunkChain.begin());
-        convertChunkChainToLevelVector();
         if(chunkChain.size() > 0){
-            position = chunkChain[0].position;
+            readPosition += 1;
+            for(int x = 0; x < chunkChain[readPosition].chunkVector.size(); x++){
+                for(int y = 0; y < chunkChain[readPosition].chunkVector[x].size(); y++){
+                    chunkChain[readPosition].chunkVector[x][y] = 0;
+                }
+            }
+           // position = chunkChain[readPosition].position;
+            convertChunkChainToLevelVector();
         }
+        
     }
     
     

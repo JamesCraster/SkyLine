@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "SpriteController.h"
+#include <cmath>
 class Player: public SpriteController{
 public:
     bool isJumping;
@@ -18,7 +19,10 @@ public:
     float gravity;
     PhysicsController physicsController;
     int health;
-    sf::Clock damageClock;
+    sf::Clock immuneClock;
+    bool notBeenHit = 1;
+    sf::Clock blinkClock;
+    
     
     Player(std::vector<AnimationController> passAnimationControllerVector,float mass,float width,float height,sf::Vector2f passTopLeftCornerOffset,sf::Vector2f boundingBoxOffset,sf::Vector2f boundingBoxDimensions,float passGravity, int passHealth):SpriteController(passAnimationControllerVector, boundingBoxOffset,boundingBoxDimensions),physicsController(mass,width,height,passTopLeftCornerOffset){
         isJumping = 0;
@@ -51,15 +55,34 @@ public:
         testTileCollisions(tileVector);
     }
     void damage(int passDamage){
+        if(immuneClock.getElapsedTime().asSeconds() > 3 || notBeenHit){
         health -= passDamage;
         if(health < 0){
             die();
         }else{
+            immuneClock.restart();
+            blinkClock.restart();
+            notBeenHit = 0;
+            
+            
+            
              //call some animation to make player blink
+        }
         }
         
     }
     void die(){
+        
+    }
+    void draw(sf::RenderWindow & window){
+        this->animationControllerVector.update();
+        if(immuneClock.getElapsedTime().asSeconds() < 3 && !notBeenHit){
+            if(!(int(blinkClock.getElapsedTime().asSeconds() /0.1) % 5 == 0)){
+                window.draw(sprite);
+            }
+        }else{
+            window.draw(sprite);
+        }
         
     }
 };

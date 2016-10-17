@@ -19,6 +19,8 @@
 #include <iostream>
 #include "LevelGenerator.h"
 
+//set player view to start somewhere sensible!!! It kicks all over the place.
+
 
 void addChain(ChunkChain &chunkChain){
     std::string level2String = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,10,0,0,0,0,0,10,0,0,0,0,10,1,0,0,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,10n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n";
@@ -26,18 +28,14 @@ void addChain(ChunkChain &chunkChain){
     chunkChain.appendChunk(Chunk(level2String,sf::Vector2f(chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.x + chunkChain.chunkChain[chunkChain.chunkChain.size()-1].size.x,chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.y), sf::Vector2f(20*32,20*32), sf::Vector2f(32,32)));
 }
 
-int main(int, char const**)
-{
-    
+int startLevel(sf::RenderWindow & window){
     std::string level2String = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,10,0,0,0,0,0,10,0,0,0,0,10,0,0,0,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0n1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0n";
     std::vector<Spike*> spikeVector;
     std::vector<sf::RectangleShape*> tileVector;
     ChunkChain chunkChain;
-    //Chunk chunk(level2String,sf::Vector2f(0,0), sf::Vector2f(20*32,20*32), sf::Vector2f(32,32));
-    //chunkChain.appendChunk(chunk);
     chunkChain.appendChunk(Chunk("",sf::Vector2f(0,0), sf::Vector2f(0,0), sf::Vector2f(32,32)));
     auto levelVector = loadLevelFromChunkChain(chunkChain, sf::Vector2f(32,32), spikeVector, tileVector);
-    //std::vector<std::vector<int>> levelVector;
+    
     //load images
     sf::Texture runNinja1;
     runNinja1.loadFromFile(resourcePath() + "BlueRun.png", sf::IntRect(0,0,10,20));
@@ -99,22 +97,22 @@ int main(int, char const**)
     enemy.animationControllerVector.push_back(redRun);
     
     /*sf::Texture standNinja1;
-    standNinja1.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(0,0,32,32*2));
-    sf::Texture standNinja2;
-    standNinja2.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32,0,32,32*2));
-    sf::Texture standNinja3;
-    standNinja3.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32,0,32*2,32*2));
-    sf::Texture standNinja4;
-    standNinja4.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32*2,0,32*3,32*2));
-    AnimationController stand(std::vector<float> {0,0.5,1.0,1.5,2},std::vector<sf::Texture*> {&standNinja1,&standNinja2,&standNinja3,&standNinja4},&player.sprite);
-    stand.active = 0;
-    player.animationControllerVector.push_back(stand);
+     standNinja1.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(0,0,32,32*2));
+     sf::Texture standNinja2;
+     standNinja2.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32,0,32,32*2));
+     sf::Texture standNinja3;
+     standNinja3.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32,0,32*2,32*2));
+     sf::Texture standNinja4;
+     standNinja4.loadFromFile(resourcePath() + "Ninja with Wind.png", sf::IntRect(32*2,0,32*3,32*2));
+     AnimationController stand(std::vector<float> {0,0.5,1.0,1.5,2},std::vector<sf::Texture*> {&standNinja1,&standNinja2,&standNinja3,&standNinja4},&player.sprite);
+     stand.active = 0;
+     player.animationControllerVector.push_back(stand);
      */
     
     player.sprite.setOrigin(5,8);
     player.sprite.setScale(2, 2);
-    player.sprite.setPosition(200, 100);
-    enemy.sprite.setPosition(300, 300);
+    player.sprite.setPosition(200,300);
+    enemy.sprite.setPosition(300, 600);
     enemy.sprite.setOrigin(5, 8);
     enemy.sprite.setScale(2,2);
     enemy.sprite.setTexture(runEnemy1,true);
@@ -123,11 +121,8 @@ int main(int, char const**)
     sf::Clock jumpClock;
     player.sprite.setTexture(runNinja1,true);
     player.animationControllerVector[0].setAnimationSpeed(4);
-
-    sf::RenderWindow window(sf::VideoMode(1400, 851), "SFML window");
-    window.setKeyRepeatEnabled(false);
-    window.setVerticalSyncEnabled(true);
-    //window.setFramerateLimit(60);
+    
+    
     sf::Clock frameTime;
     double storedFrameTime;
     
@@ -167,11 +162,8 @@ int main(int, char const**)
     std::vector<std::vector<int>> generatedThing{{1},{1},{1}};
     //something's wrong with generator()...
     generator(generatedThing, 1, std::vector<int>{1,2}, std::vector<float> {0.5,0.5}, std::vector<bool> {0,0},std::vector<int> {0,0}, std::vector<int> {0,0});
-    std::cout << generatedThing[0][0] << std::endl;
-    std::cout << generatedThing[1][0] << std::endl;
-    std::cout << generatedThing[2][0] << std::endl;
     //quota(3, 1, 3, 4);
-   // probability(std::vector<int> {1}, std::vector<float> {0.1});
+    // probability(std::vector<int> {1}, std::vector<float> {0.1});
     //inVector(std::vector<int> {1}, 1);
     //std::cout << generatedThing[0]
     std::default_random_engine generator;
@@ -185,15 +177,15 @@ int main(int, char const**)
     healthSprite.setTexture(healthTexture);
     for(int x = 0; x < 1000; x++){
         
-    //std::cout << distribution(generator) << std::endl;
+        //std::cout << distribution(generator) << std::endl;
     }
     sf::Joystick ps3Cont;
     
     while (window.isOpen())
-    
+        
     {
         // Process events
-       
+        
         //fixing my timestep results in poor performance on my macbook. Cutting out this line will fix the physics timestep:
         storedFrameTime = 1/60.f;
         
@@ -211,7 +203,7 @@ int main(int, char const**)
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
                 if(mostRecentlyPressed == 0){
-                   // player.physicsController.xVelocity *= pow(0.0,(1/60)/(storedFrameTime));
+                    // player.physicsController.xVelocity *= pow(0.0,(1/60)/(storedFrameTime));
                     player.physicsController.xVelocity *= 0.15;
                     player.sprite.setScale(2, 2);
                 }
@@ -230,7 +222,7 @@ int main(int, char const**)
             
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
                 if(mostRecentlyPressed == 1){
-                   player.physicsController.xVelocity *= 0.15 /*pow(0.0,(1/60)/(storedFrameTime))*/;
+                    player.physicsController.xVelocity *= 0.15 /*pow(0.0,(1/60)/(storedFrameTime))*/;
                     
                 }
                 
@@ -266,30 +258,30 @@ int main(int, char const**)
                 //player.animationControllerVector[0].setCurrentFrame(5);
             }
         }
-        while(chunkChain.chunkChain.size() != 0 && (player.sprite.getPosition().x + playerView.getCenter().x + playerView.getSize().x/2 > chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.x + chunkChain.chunkChain[chunkChain.chunkChain.size()-1].size.x)){
+        while(chunkChain.chunkChain.size() != 0 && (playerView.getCenter().x + playerView.getSize().x/2 > chunkChain.chunkChain[chunkChain.chunkChain.size()-1].position.x + chunkChain.chunkChain[chunkChain.chunkChain.size()-1].size.x)){
             addChain(chunkChain);
             levelVector = loadLevelFromChunkChain(chunkChain, sf::Vector2f(32,32), spikeVector, tileVector);
         }
-       // std::cout << ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) << std::endl;
+        // std::cout << ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) << std::endl;
         player.animationControllerVector[0].setAnimationSpeed(std::abs(player.physicsController.xVelocity)/50);
         storedSouthContact = player.physicsController.tileCollisionController.southContact;
         window.clear();
         accumulator += storedFrameTime;
-            while (accumulator >= dt) {
-                sf::Clock physicsTime;
+        while (accumulator >= dt) {
+            sf::Clock physicsTime;
             player.testTileCollisions(tileVector);
             if(mostRecentlyPressed == 1){
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) > 10)
                 {
                     player.direction = 1;
-                    player.animationControllerVector[0].update();
+                    player.animationControllerVector.setActiveAnimation(0);
                     player.sprite.setScale(2, 2);
                     
                 }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) < -10)
                 {
                     player.direction = -1;
-                    player.animationControllerVector[0].update();
-                   // player.physicsController.xVelocity *= 0.15;
+                    player.animationControllerVector.setActiveAnimation(0);
+                    // player.physicsController.xVelocity *= 0.15;
                     player.sprite.setScale(-2, 2);
                     
                     
@@ -304,14 +296,14 @@ int main(int, char const**)
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||  ps3Cont.getAxisPosition(0, sf::Joystick::Axis::X) > 10)
                 {
                     player.direction = -1;
-                    player.animationControllerVector[0].update();
+                    player.animationControllerVector.setActiveAnimation(0);
                     player.sprite.setScale(-2, 2);
                     
                 }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                 {
                     
                     player.direction = 1;
-                    player.animationControllerVector[0].update();
+                    player.animationControllerVector.setActiveAnimation(0);
                     player.sprite.setScale(2, 2);
                     
                     
@@ -319,14 +311,14 @@ int main(int, char const**)
                 {
                     player.direction  = 0;
                     player.physicsController.xVelocity *= 0.15;
-
+                    
                 }
                 
             }
             if(storedDirection != player.direction){
                 player.physicsController.xVelocity *= 0.40;
             }
-                storedDirection = player.direction;
+            storedDirection = player.direction;
             
             if(player.physicsController.tileCollisionController.southContact){
                 player.physicsController.xForce += 10000 * player.direction;
@@ -356,14 +348,13 @@ int main(int, char const**)
                     player.animationControllerVector[0].setCurrentFrame(3);
                     
                 }else{
-                    //player.animationControllerVector[0].active = 1;
                     
                 }
             }
-                if(std::abs(player.physicsController.xVelocity) < 0.1){
-                    player.animationControllerVector[0].setCurrentFrame(3);
-                    
-                }
+            if(std::abs(player.physicsController.xVelocity) < 0.1){
+                player.animationControllerVector[0].setCurrentFrame(3);
+                
+            }
             player.update(dt,tileVector,mostRecentlyPressed);
             previousAcceleration = currentAcceleration;
             previousVelocity = currentVelocity;
@@ -371,11 +362,11 @@ int main(int, char const**)
             currentAcceleration.y = player.physicsController.yAcceleration;
             currentVelocity.x = player.physicsController.xVelocity;
             currentVelocity.y = player.physicsController.yVelocity;
-                previousPosition = currentPosition;
-                 circle.move(10,0);
-                currentPosition = circle.getPosition();
-             
-                
+            previousPosition = currentPosition;
+            circle.move(10,0);
+            currentPosition = circle.getPosition();
+            
+            
             accumulator -= dt;
         }
         for(int x = 0; x < spikeVector.size(); x++){
@@ -383,11 +374,20 @@ int main(int, char const**)
                 player.damage(1);
             }
         }
+        if(chunkChain.chunkChain.size() > 0){
+            while(playerView.getCenter().x - playerView.getSize().x/2 > chunkChain.chunkChain[chunkChain.readPosition].position.x + chunkChain.chunkChain[1].size.x + chunkChain.chunkChain[chunkChain.readPosition].size.x){
+                chunkChain.removeChunk();
+                levelVector.clear();
+                levelVector = loadLevelFromChunkChain(chunkChain, sf::Vector2f(32,32), spikeVector, tileVector);
+            }
+        }
         
         const double alpha = accumulator/dt;
         circle.setPosition(lerp(currentPosition.x,previousPosition.x,alpha), lerp(currentPosition.y,previousPosition.y,alpha));
-       
-       
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::I)){
+            startLevel(window);
+        }
+        
         cameraTime = storedFrameTime;
         
         sf::RectangleShape skyScraper;
@@ -398,10 +398,10 @@ int main(int, char const**)
         skyScraper.setFillColor(sf::Color(24,118,118,0));
         skyScraper.move(-(cameraMovement.x - playerView.getCenter().x)/1.1,0);
         //move slightly less than the foreground
-      
+        
         window.draw(skyScraper);
         
-        positionView(playerView, player.sprite.getPosition(), cameraTime);
+        positionView(playerView, sf::Vector2f(player.sprite.getPosition().x+400,player.sprite.getPosition().y-200), cameraTime);
         //still problems with corners!!
         enemy.update(tileVector);
         
@@ -412,26 +412,43 @@ int main(int, char const**)
             tileVector[i]->setSize(sf::Vector2f(tileVector[i]->getSize().x+1, tileVector[i]->getSize().y+1));
             window.draw(*tileVector[i]);
             tileVector[i]->setSize(sf::Vector2f(tileVector[i]->getSize().x-1, tileVector[i]->getSize().y-1));
-  
+            
         }
-
-        drawFloorSpriteFromLevelVector(levelVector, floorTexture, floorTextureRotated, window);
         
+        drawFloorSpriteFromLevelVector(levelVector, floorTexture, floorTextureRotated, window);
         for(int i = 0; i < player.health; i++){
-            healthSprite.setPosition(playerView.getCenter().x - playerView.getSize().x/2 + 20 + 52 * i,playerView.getCenter().y  - playerView.getSize().y/2 + 20);
+            healthSprite.setPosition(playerView.getCenter().x - playerView.getSize().x/2 + 21 + 53 * i,playerView.getCenter().y  - playerView.getSize().y/2 + 20);
             window.draw(healthSprite);
         }
+       // sf::RectangleShape whiteLine(sf::Vector2f(playerView.getSize().x, 3));
+       // whiteLine.setPosition(0, 50);
+       // whiteLine.setFillColor(sf::Color::White);
+       // window.draw(whiteLine);
         
-        enemy.animationControllerVector[0].update();
+        player.draw(window);
+        
+        player.animationControllerVector.setActiveAnimation(0);
         for (int x = 0; x < spikeVector.size(); x++){
             spikeVector[x]->spikeSprite.setTexture(spikeTexture);
             window.draw(spikeVector[x]->spikeSprite);
         }
-        window.draw(player.sprite);
         
         window.display();
         storedFrameTime =  frameTime.restart().asSeconds();
     }
     
+    
     return EXIT_SUCCESS;
 }
+    
+
+int main(int, char const**)
+{
+    sf::RenderWindow window(sf::VideoMode(1400, 851), "SkyLines", sf::Style::Close);
+    window.setKeyRepeatEnabled(false);
+    window.setVerticalSyncEnabled(true);
+    //window.setFramerateLimit(60);
+    startLevel(window);
+}
+
+

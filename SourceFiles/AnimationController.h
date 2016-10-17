@@ -33,6 +33,29 @@ public:
     void setAnimationSpeed(float passAnimationSpeed);
     float getAnimationSpeed();
 };
+class AnimationControllerVector:public std::vector<AnimationController>{
+public:
+    AnimationControllerVector(){
+        
+    }
+    void update(){
+        for(int i = 0; i < this->size(); i++){
+            if((*this)[i].active){
+                (*this)[i].update();
+            }
+        }
+        
+    }
+    void setActiveAnimation(int index){
+        if(index > 0 && index < this->size()){
+            for(int i = 0; i < this->size(); i++){
+                (*this)[i].active = 0;
+            }
+            (*this)[index].active = 1;
+            
+        }
+    }
+};
 
 
 #endif /* defined(__Platformer1__AnimationController__) */

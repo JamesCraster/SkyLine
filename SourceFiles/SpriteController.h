@@ -144,7 +144,7 @@ class SpriteController{
 public:
     sf::FloatRect boundingBox;
     sf::Sprite sprite;
-    std::vector<AnimationController> animationControllerVector;
+    AnimationControllerVector animationControllerVector;
     sf::Vector2f boundingBoxOffset;
     
     SpriteController(std::vector<AnimationController> passAnimationControllerVector, sf::Vector2f passBoundingBoxOffset,sf::Vector2f boundingBoxDimensions)
