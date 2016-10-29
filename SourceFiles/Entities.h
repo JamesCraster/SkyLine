@@ -1,6 +1,6 @@
 //
 //  Entities.h
-//  Platformer2
+//  StealthPlatformer
 //
 //  Created by James Vaughan Craster on 07/10/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
@@ -22,6 +22,7 @@ public:
     sf::Clock immuneClock;
     bool notBeenHit = 1;
     sf::Clock blinkClock;
+    bool alive = 1;
     
     
     Player(std::vector<AnimationController> passAnimationControllerVector,float mass,float width,float height,sf::Vector2f passTopLeftCornerOffset,sf::Vector2f boundingBoxOffset,sf::Vector2f boundingBoxDimensions,float passGravity, int passHealth):SpriteController(passAnimationControllerVector, boundingBoxOffset,boundingBoxDimensions),physicsController(mass,width,height,passTopLeftCornerOffset){
@@ -32,46 +33,44 @@ public:
     }
     void testTileCollisions(std::vector<sf::RectangleShape*> tileVector){
         physicsController.tileCollisionController.stationaryCollisionTest(tileVector, sprite.getPosition(),2);
-        if(physicsController.tileCollisionController.northContact && physicsController.yVelocity < 0)
+        if(physicsController.tileCollisionController.northContact && physicsController.velocity.y < 0)
         {
-            physicsController.yVelocity = 0;
+            physicsController.velocity.y  = 0;
         }
-        if(physicsController.tileCollisionController.southContact && physicsController.yVelocity > 0)
+        if(physicsController.tileCollisionController.southContact && physicsController.velocity.y  > 0)
         {
-            physicsController.yVelocity = 0;
+            physicsController.velocity.y  = 0;
         }
-        if(physicsController.tileCollisionController.eastContact && physicsController.xVelocity > 0)
+        if(physicsController.tileCollisionController.eastContact && physicsController.velocity.x > 0)
         {
-            physicsController.xVelocity = 0;
+            physicsController.velocity.x = 0;
         }
-        if(physicsController.tileCollisionController.westContact && physicsController.xVelocity < 0)
+        if(physicsController.tileCollisionController.westContact && physicsController.velocity.x < 0)
         {
-            physicsController.xVelocity = 0;
+            physicsController.velocity.x = 0;
         }
     }
-    void update(float timeElapsed,std::vector<sf::RectangleShape*> tileVector,bool mostRecentlyPressed){
-        sprite.move(physicsController.update(timeElapsed, sprite.getPosition(), tileVector));
-        this->positionBoundingBox(sprite.getPosition());
+    void update(float t, float dt, float accumulator, std::vector<sf::RectangleShape*> tileVector,bool mostRecentlyPressed){
+        physicsController.update(t,dt,accumulator, tileVector);
+        this->positionBoundingBox(physicsController.displacement);
         testTileCollisions(tileVector);
     }
     void damage(int passDamage){
         if(immuneClock.getElapsedTime().asSeconds() > 3 || notBeenHit){
         health -= passDamage;
-        if(health < 0){
+        if(health <= 0){
             die();
         }else{
             immuneClock.restart();
             blinkClock.restart();
             notBeenHit = 0;
-            
-            
-            
-             //call some animation to make player blink
         }
         }
-        
-    }
+        }
     void die(){
+        health = 0;
+        alive = 0;
+        
         
     }
     void draw(sf::RenderWindow & window){
@@ -173,7 +172,7 @@ public:
     
 private:
     sf::RectangleShape rect;
-    std::vector<AnimationController> animationControllerVector;
+    AnimationControllerVector animationControllerVector;
     
 public:
     Spike(sf::Vector2f position, sf::Vector2f leftCornerOffset, sf::Vector2f dimensions, sf::Vector2f rotationalCenter){

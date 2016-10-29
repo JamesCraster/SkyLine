@@ -1,6 +1,6 @@
 //
 //  LevelGenerator.h
-//  Platformer2
+//  StealthPlatformer
 //
 //  Created by James Vaughan Craster on 09/10/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
@@ -20,7 +20,7 @@
 
 int quota(int blockCount, bool condition, int lessThanOrEqual, int greaterThanOrEqual);
 
-int probability(std::vector<int> blockTypes, std::vector<float> probabilityVector);
+int probability(std::vector<float> probabilityVector);
 
 std::vector<float> assignProbabilities(std::vector<int> blockTypes, std::vector<int> blockTypeFrequencies, std::vector<float> probabilityVector, std::vector<bool> conditionVector,std::vector<int> lessThanOrEqualVector, std::vector<int> greaterThanOrEqualVector);
 

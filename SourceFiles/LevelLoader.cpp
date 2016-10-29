@@ -98,8 +98,11 @@ std::vector<std::vector<int>> loadLevelFromString(std::string levelString,int le
     
 }
 std::vector<std::vector<int>> loadLevelFromChunkChain(ChunkChain chunkChain, sf::Vector2f tileSize, std::vector<Spike*> &spikeVector, std::vector<sf::RectangleShape*>& tileVector){
-    spikeVector.clear();
-    tileVector.clear();
+    for(int i = 0; i < tileVector.size(); i++){
+        delete tileVector[i];
+    }
+    spikeVector =  std::vector<Spike*>();
+    tileVector = std::vector<sf::RectangleShape*>();
     auto levelVector = chunkChain.levelVector;
     for (int x = 0; x < levelVector.size(); x++) {
         for(int y = 0; y < levelVector[x].size(); y++){
@@ -142,11 +145,11 @@ void drawFloorSpriteFromLevelVector(std::vector<std::vector<int>> levelVector, s
                     if(levelVector[x-1][y] != 1){
                         sf::Sprite floorSprite;
                         floorSprite.setTexture(floorTexture);
-                        floorSprite.setOrigin(32.f/2,32.f/2);
+                        floorSprite.setOrigin(16,16);
                         floorSprite.setTextureRect(sf::IntRect(0,0,2, floorTexture.getSize().y));
                         floorSprite.setPosition(x*32, y*32);
                         floorSprite.setRotation(0);
-                        floorSprite.move(32.f/2, 32.f/2);
+                        floorSprite.move(16, 16);
                         window.draw(floorSprite);
                         
                     }
@@ -191,11 +194,11 @@ void drawFloorSpriteFromLevelVector(std::vector<std::vector<int>> levelVector, s
                     if(levelVector[x+1][y] != 1){
                         sf::Sprite floorSprite;
                         floorSprite.setTexture(floorTexture);
-                        floorSprite.setOrigin(32.f/2,32.f/2);
+                        floorSprite.setOrigin(16,16);
                         floorSprite.setTextureRect(sf::IntRect(0,0,2, floorTexture.getSize().y));
                         floorSprite.setPosition(x*32, y*32);
                         floorSprite.setRotation(180);
-                        floorSprite.move(32.f/2, 32.f/2);
+                        floorSprite.move(16, 16);
                         window.draw(floorSprite);
                         
                     }

@@ -1,6 +1,6 @@
 //
 //  LevelGenerator.cpp
-//  Platformer2
+//  StealthPlatformer
 //
 //  Created by James Vaughan Craster on 09/10/2016.
 //  Copyright (c) 2016 James Vaughan Craster. All rights reserved.
@@ -21,17 +21,18 @@ int quota(int blockCount, bool condition = 1, int lessThanOrEqual = 0, int great
     return 0;
 }
 
-int probability(std::vector<int> blockTypes, std::vector<float> probabilityVector){
+int probability(std::vector<float> probabilityVector){
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dis(0, 1);
     float randomValue = dis(gen);
     float probability = 0;
+    //std::cout << randomValue << std::endl;
     for(int i = 0; i < probabilityVector.size(); i++){
         probability += probabilityVector[i];
         if(randomValue <= probability){
             //std::cout << blockTypes[i] << std::endl;
-            return blockTypes[i];
+            return i;
         }
         
     }
@@ -79,30 +80,45 @@ bool inVector(std::vector<int> alreadyCovered, int integer){
             return 1;
         }
     }
-    return 0;
 }
 //consider generator function struct
 
 
 void generator(std::vector<std::vector<int>> & levelVector, int code, std::vector<int> blockTypes, std::vector<float> probabilityVector, std::vector<bool> conditionVector,std::vector<int> lessThanOrEqualVector, std::vector<int> greaterThanOrEqualVector){
 
-    int numberOfCalls = 0;
-    for (int x = 0; x < levelVector.size(); x++) {
-        for(int y = 0; y < levelVector[0].size(); y++){
-            if(levelVector[x][y] == code){
-                numberOfCalls += 1;
-            }
-        }
-    }
-    
     std::vector<int> blockTypeFrequencies;
-    std::vector<int> resultingBlockTypes;
-    for(int i = 0; i < numberOfCalls; i++){
-        resultingBlockTypes.push_back(98);
-    }
     for(int i = 0; i < blockTypes.size(); i++){
         blockTypeFrequencies.push_back(0);
     }
+    
+    std::vector<std::pair<int,int>> coordinateVector;
+    for (int x = 0; x < levelVector.size(); x++) {
+        for(int y = 0; y < levelVector[0].size(); y++){
+            if(levelVector[x][y] == code){
+                coordinateVector.push_back(std::make_pair(x,y));
+            }
+        }
+    }
+    int initialSize = coordinateVector.size();
+    for(int i = 0; i < initialSize; i++){
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dis(0,coordinateVector.size()-1);
+        int randomValue = dis(gen);
+       // std::cout << randomValue << std::endl;
+        
+        std::vector<float> assignedProbabilityVector = assignProbabilities(blockTypes, blockTypeFrequencies, probabilityVector, conditionVector, lessThanOrEqualVector, greaterThanOrEqualVector);
+        int blockIndex = probability(assignedProbabilityVector);
+        blockTypeFrequencies[blockIndex] += 1;
+        levelVector[coordinateVector[randomValue].first][coordinateVector[randomValue].second] = blockTypes[blockIndex];
+        coordinateVector.erase(coordinateVector.begin() + randomValue);
+        
+    }
+    
+    
+   
+   
+    /*
     
     std::vector<int> alreadyCovered;
     srand(time(0));
@@ -113,7 +129,8 @@ void generator(std::vector<std::vector<int>> & levelVector, int code, std::vecto
             
         }
         std::vector<float> assignedProbabilityVector = assignProbabilities(blockTypes, blockTypeFrequencies, probabilityVector, conditionVector, lessThanOrEqualVector, greaterThanOrEqualVector);
-        int blockIndex = probability(blockTypes, assignedProbabilityVector);
+        int blockIndex = probability(assignedProbabilityVector);
+        std::cout << blockIndex << std::endl;
         blockTypeFrequencies[blockIndex-1] += 1;
         resultingBlockTypes[randomValue+1] = blockTypes[blockIndex-1];
         
@@ -128,7 +145,7 @@ void generator(std::vector<std::vector<int>> & levelVector, int code, std::vecto
                 levelVector[x][y] = resultingBlockTypes[counter];
             }
         }
-    }
+    }*/
 }
 
  std::vector<std::vector<int>> generateLevelVector(std::vector<std::vector<int>> levelVector){
@@ -142,3 +159,4 @@ void generator(std::vector<std::vector<int>> & levelVector, int code, std::vecto
     
     
 }
+

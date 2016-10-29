@@ -8,12 +8,16 @@
 
 #include "Camera.h"
 float lerp (float a, float b, float t) { return a + t * (b - a); }
+sf::Vector2f lerp(sf::Vector2f a, sf::Vector2f b, double t){return a + sf::Vector2f(t * (b.x - a.x),t * (b.y - a.y));}
+
+
 
 
 void positionView(sf::View & playerView, sf::Vector2f position, float cameraTime){
     if(position.x > playerView.getSize().x * 0.5)
     {
-        playerView.setCenter(int(lerp(playerView.getCenter().x, position.x,pow(0.09,cameraTime))), int(playerView.getCenter().y));
+        playerView.setCenter(int(lerp(playerView.getCenter().x, position.x,pow(0.0000009,
+                                                                               cameraTime))), int(playerView.getCenter().y));
     }else
     {
         //playerView.setCenter(int(lerp(playerView.getCenter().x,playerView.getSize().x * 0.5,pow(0.05,cameraTime))), int(playerView.getCenter().y));

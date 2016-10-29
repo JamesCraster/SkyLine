@@ -11,13 +11,12 @@
 
 #include <stdio.h>
 #include <vector>
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 enum Controller{
-    JUMP = 1,
-    RIGHT = 2,
-    LEFT = 3,
-    DOWN = 4,
-    FIRE = 5
+    JUMP = 0,
+    FIRE = 1
     
 };
 
@@ -35,6 +34,13 @@ public:
     bool wasPressed(int index){
         return (isPressed[index] && !wasPressedOneFrameAgo[index]);
     }
-    //some 'get input function' in here - depends upon controller type, obviously!
+    void getInput(){
+        wasPressedOneFrameAgo = isPressed;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+            isPressed[Controller::JUMP] = 1;
+        }else{
+            isPressed[Controller::JUMP] = 0;
+        }
+    }
 };
 #endif /* defined(__Platformer2__Controller__) */

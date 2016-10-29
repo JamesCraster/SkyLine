@@ -15,6 +15,7 @@
 #include <cmath>
 
 float lerp (float a, float b, float t);
+sf::Vector2f lerp(sf::Vector2f a, sf::Vector2f b, double t);
 void positionView(sf::View & playerView, sf::Vector2f position, float cameraTime);
 
 
